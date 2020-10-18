@@ -1,5 +1,3 @@
-using System;
-
 namespace DocumentsEditor.Models
 {
     public class ErrorViewModel
