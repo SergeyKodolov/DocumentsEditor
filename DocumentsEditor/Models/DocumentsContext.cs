@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+//using System.Data.Entity;
 
 namespace DocumentsEditor.Models
 {
@@ -12,5 +13,16 @@ namespace DocumentsEditor.Models
         {
             Database.EnsureCreated();
         }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            // configures one-to-many relationship
+            modelBuilder.Entity<User>()
+                .HasMany(d => d.Documents)
+                .WithOne(u => u.User)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Cascade);
+        }
     }
 }
+

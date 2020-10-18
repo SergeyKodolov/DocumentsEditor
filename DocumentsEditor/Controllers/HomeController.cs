@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using DocumentsEditor.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication;
 
 namespace DocumentsEditor.Controllers
 {
@@ -17,17 +18,21 @@ namespace DocumentsEditor.Controllers
         [Authorize]
         public IActionResult Index()
         {
-            var user = User.Identity.Name;
-            return View(db.Documents.ToList());
+            var result = db.Documents.Where(d => d.User.Login == User.Identity.Name);            
+            return View(result.ToList());
         }
 
         [Authorize]
         [HttpGet]
         public IActionResult CreateDocument()
         {
-            var doc = new Document { Name = "Новый документ" };
-            db.Documents.Add(doc);
-            db.SaveChanges();
+            var user = db.Users.Where(u => u.Login == User.Identity.Name).FirstOrDefault();
+            if (user != null)
+            {
+                var doc = new Document { Name = "Новый документ", User = user };
+                db.Documents.Add(doc);
+                db.SaveChanges();
+            }            
             return RedirectToAction("Index");
         }
 
@@ -37,10 +42,20 @@ namespace DocumentsEditor.Controllers
         {
             if (id != null)
             {
-                Document doc = db.Documents.FirstOrDefault(p => p.Id == id);
+                Document doc = db.Documents.FirstOrDefault(d => d.Id == id);                
+
                 if (doc != null)
-                    ViewBag.DocumentId = id;
-                    return View(doc);
+                {
+                    var login = db.Users.FirstOrDefault(u => u.Id == doc.UserId).Login;
+                    if (login == User.Identity.Name)
+                    {
+                        return View(doc);
+                    }
+                    else
+                    {
+                        return Forbid();
+                    }
+                }       
             }
             return NotFound();
         }
@@ -49,8 +64,12 @@ namespace DocumentsEditor.Controllers
         [HttpPost]
         public IActionResult EditDocument(Document doc)
         {
-            db.Documents.Update(doc);
-            db.SaveChanges();
+            var user = db.Users.Where(u => u.Login == User.Identity.Name).FirstOrDefault();
+            if (user != null)
+            {
+                db.Documents.Update(doc);
+                db.SaveChanges();
+            }            
             return RedirectToAction("Index");
         }
 
@@ -62,9 +81,19 @@ namespace DocumentsEditor.Controllers
             {
                 Document doc = db.Documents.FirstOrDefault(p => p.Id == id);
                 if (doc != null)
-                    db.Documents.Remove(doc);
-                    db.SaveChanges();
-                    return RedirectToAction("Index");
+                {
+                    var login = db.Users.FirstOrDefault(u => u.Id == doc.UserId).Login;
+                    if (login == User.Identity.Name)
+                    {
+                        db.Documents.Remove(doc);
+                        db.SaveChanges();
+                        return RedirectToAction("Index");
+                    }
+                    else
+                    {
+                        return Forbid();
+                    }
+                }
             }
             return NotFound();
         }

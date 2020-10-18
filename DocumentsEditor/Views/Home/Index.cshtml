@@ -7,7 +7,6 @@
 <a asp-action="CreateDocument">Добавить документ</a>
 <table class="table">
     <tr>
-        <td>ID</td>
         <td>Название</td>
         <td/>
         <td/>
@@ -15,7 +14,6 @@
     @foreach (var doc in Model)
     {
         <tr>
-            <td>@doc.Id</td>
             <td>@doc.Name</td>
             <td><a asp-action="EditDocument" asp-route-id="@doc.Id">Редактировать</a></td>
             <td><a asp-action="DeleteDocument" asp-route-id="@doc.Id">Удалить</a></td>
