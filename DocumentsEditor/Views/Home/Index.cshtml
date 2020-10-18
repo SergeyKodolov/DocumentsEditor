@@ -1,0 +1,32 @@
+﻿@using System.Web
+@model IEnumerable<DocumentsEditor.Models.Document>
+@{
+    ViewData["Title"] = "Home Page";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Документы</title>
+</head>
+<body>
+    <h3>Документы</h3>
+    <table>
+        <tr>
+            <td>ID</td>
+            <td>Название</td>
+            <td/>
+        </tr>
+        @foreach (var doc in Model)
+        {
+            <tr>
+                <td>@doc.Id</td>
+                <td>@doc.Name</td>
+                <td><a href="~/Home/EditDocument/@doc.Id">Редактировать</a></td>
+            </tr>
+        }
+    </table>
+</body>
+</html>
