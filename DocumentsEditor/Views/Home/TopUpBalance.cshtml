@@ -1,0 +1,15 @@
+﻿@model DocumentsEditor.Models.User
+@{
+    ViewData["Title"] = "Редактирование документа";
+}
+
+<form asp-route-id="@Model.Id">
+    <div class="form-group">
+        <label class="control-label">Внести</label>
+        <input type="number" asp-for="Balance" class="form-control" />
+    </div>
+    <input type="hidden" asp-for="Id" />
+    <div class="form-group">
+        <input type="submit" value="Оплатить" class="btn btn-outline-dark" />
+    </div>
+</form>

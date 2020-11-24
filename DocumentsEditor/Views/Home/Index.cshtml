@@ -1,23 +1,40 @@
-﻿@model IEnumerable<DocumentsEditor.Models.Document>
+﻿@using DocumentsEditor.Models
+@using DocumentsEditor.ViewModels
+@model HomeModel
 @{
-    ViewData["Title"] = "Home Page"; 
+    ViewData["Title"] = "Home Page";
 }
 
 <h3>Документы</h3>
-<a asp-action="CreateDocument">Добавить документ</a>
+<p><a asp-action="TopUpBalance">Баланс: @Model.CurrentUser.Balance у.е.</a></p>
+@if (Model.CurrentUser.Balance < 0)
+{
+<p><a onclick="balance()">Добавить документ</a></p>
+}
+else
+{
+<p><a asp-action="CreateDocument">Добавить документ</a></p>
+}
+
+
 <table class="table">
     <tr>
         <td>Название</td>
-        <td/>
-        <td/>
+        <td />
+        <td />
     </tr>
-    @foreach (var doc in Model)
+    @foreach (var doc in Model.Documents)
     {
-        <tr>
-            <td>@doc.Name</td>
-            <td><a asp-action="EditDocument" asp-route-id="@doc.Id">Редактировать</a></td>
-            <td><a asp-action="DeleteDocument" asp-route-id="@doc.Id">Удалить</a></td>
-        </tr>
+    <tr>
+        <td>@doc.Name</td>
+        <td><a asp-action="EditDocument" asp-route-id="@doc.Id">Редактировать</a></td>
+        <td><a asp-action="DeleteDocument" asp-route-id="@doc.Id">Удалить</a></td>
+    </tr>
     }
 </table>
+<script type="text/javascript">
+    function balance() {
+        alert("Недостаточно средств!");
+    }
+</script>
 
