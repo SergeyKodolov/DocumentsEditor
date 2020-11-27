@@ -5,11 +5,11 @@
 
 <form asp-route-id="@Model.Id">
     <div class="form-group">
-        <label class="control-label">Внести</label>
-        <input type="number" asp-for="Balance" class="form-control" />
+        <h3 class="control-label">Внести</h3><br/>
+        <input type="number" asp-for="Balance" />
     </div>
-    <input type="hidden" asp-for="Id" />
     <div class="form-group">
         <input type="submit" value="Оплатить" class="btn btn-outline-dark" />
     </div>
+    <input type="hidden" asp-for="Id" />
 </form>

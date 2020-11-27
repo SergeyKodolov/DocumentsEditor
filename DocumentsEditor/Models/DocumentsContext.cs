@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-//using System.Data.Entity;
 
 namespace DocumentsEditor.Models
 {

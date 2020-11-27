@@ -1,37 +1,46 @@
-﻿@using DocumentsEditor.Models
-@using DocumentsEditor.ViewModels
+﻿@using DocumentsEditor.ViewModels
 @model HomeModel
 @{
     ViewData["Title"] = "Home Page";
 }
 
 <h3>Документы</h3>
-<p><a asp-action="TopUpBalance">Баланс: @Model.CurrentUser.Balance у.е.</a></p>
-@if (Model.CurrentUser.Balance < 0)
-{
-<p><a onclick="balance()">Добавить документ</a></p>
-}
-else
-{
-<p><a asp-action="CreateDocument">Добавить документ</a></p>
-}
-
-
-<table class="table">
-    <tr>
-        <td>Название</td>
-        <td />
-        <td />
-    </tr>
-    @foreach (var doc in Model.Documents)
+<div>
+    <label>Баланс: @Model.CurrentUser.Balance у.е.</label>
+    <a asp-action="TopUpBalance">(пополнить)</a>
+</div>
+<div class="form-group">
+    @if (Model.CurrentUser.Balance < 0)
     {
-    <tr>
-        <td>@doc.Name</td>
-        <td><a asp-action="EditDocument" asp-route-id="@doc.Id">Редактировать</a></td>
-        <td><a asp-action="DeleteDocument" asp-route-id="@doc.Id">Удалить</a></td>
-    </tr>
+        <a onclick="balance()">Добавить документ</a>
     }
+    else
+    {
+        <a asp-action="CreateDocument">Добавить документ</a>
+    }
+</div>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Название</th>
+            <th>Действие</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var doc in Model.Documents)
+        {
+            <tr>
+                <td>@doc.Name</td>
+                <td>
+                    <a asp-action="EditDocument" asp-route-id="@doc.Id">Редактировать</a> |
+                    <a asp-action="DeleteDocument" asp-route-id="@doc.Id">Удалить</a>
+                </td>
+            </tr>
+        }
+    </tbody>
 </table>
+
 <script type="text/javascript">
     function balance() {
         alert("Недостаточно средств!");
